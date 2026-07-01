@@ -1,10 +1,11 @@
-import React from "react";
+import { Outlet } from "react-router-dom";
+import DashboardLayout from "../layouts/DashboardLayout";
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   return (
-    <>
-      <h1>Dashboard</h1>
-    </>
+    <DashboardLayout>
+      <Outlet />
+    </DashboardLayout>
   );
 };
 

@@ -1,4 +1,5 @@
 import "./App.css";
+import AppRoutes from "./routes/AppRoutes";
 
 
 function App() {
@@ -6,7 +7,7 @@ function App() {
 
   return (
     <>
-      <h1 className="text-red-500">Welcome to My App</h1>
+      <AppRoutes />
     </>
   );
 }
