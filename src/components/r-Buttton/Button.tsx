@@ -30,7 +30,7 @@ const Button = ({
       type={type}
       disabled={disabled}
       className={clsx(
-        "",
+        "cursor-pointer",
         "px-5", 
         "py-2.5",                 
         "rounded-lg",            

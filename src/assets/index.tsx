@@ -454,3 +454,16 @@ export const TestTrackingIcon = ({ height, width }: TestTubeManProps) => {
     </svg>
   );
 };
+export const ChevronDownIcon = ({ height, width }: TestTubeManProps) => {
+  return (
+<svg width={width} height={height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_12433_522" style={{ maskType: "alpha" }} maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<rect width="24" height="24" fill="white"/>
+</mask>
+<g mask="url(#mask0_12433_522)">
+<path d="M12 15L7 10H17L12 15Z" fill="#374151"/>
+</g>
+</svg>
+
+  );
+};

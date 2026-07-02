@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import {
   DashBoardIcon,
@@ -23,9 +23,10 @@ const menuItems = [
 ];
 
 const Sidebar = () => {
+  const navigate= useNavigate();
   return (
     <aside className="flex h-screen w-64 flex-col border-r border-gray-200 bg-white">
-      <div className="border-gray-100 px-6 py-6">
+      <div className="border-gray-100 px-6 py-6 cursor-pointer" onClick={() => navigate("/")}>
         <Logo width={140} height={30} />
       </div>
 
