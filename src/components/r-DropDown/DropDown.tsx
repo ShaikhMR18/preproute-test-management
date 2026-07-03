@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import clsx from "clsx";
 import type { SelectProps } from "../r-types";
-
-
 const DropDown = ({
   label,
   placeholder = "Choose from Drop-down",
@@ -31,7 +29,7 @@ const DropDown = ({
   }, []);
 
   return (
-    <div className={clsx("w-full", className)} ref={ref}>
+    <div className={clsx("relative w-full", className)} ref={ref}>
       {label && (
         <label className="mb-2 block text-sm font-medium text-[#2E3446]">
           {label}
@@ -40,8 +38,8 @@ const DropDown = ({
 
       <button
         type="button"
-        onClick={() => setOpen(!open)}
-        className="flex h-12 w-full items-center justify-between rounded-lg border border-[#D9DDE8] bg-white px-4 text-left transition focus:border-[#7489FF] focus:outline-none"
+        onClick={() => setOpen((prev) => !prev)}
+        className="flex h-12 w-full items-center justify-between rounded-lg border border-[#D9DDE8] bg-white px-4 text-left"
       >
         <span
           className={clsx(selectedOption ? "text-[#2E3446]" : "text-[#C5CAD5]")}
@@ -51,36 +49,28 @@ const DropDown = ({
 
         <ChevronDown
           size={18}
-          className={clsx("transition-transform", open && "rotate-180")}
+          className={clsx("transition-transform cursor-pointer", open && "rotate-180 ")}
         />
       </button>
 
       {open && (
-        <div className="mt-2 max-h-60 overflow-y-auto rounded-lg border border-[#E5E7EB] bg-white shadow-lg">
-          {options.length > 0 ? (
-            options.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => {
-                  onChange(option.value);
-                  setOpen(false);
-                }}
-                className={clsx(
-                  "w-full px-4 py-3 text-left text-sm transition",
-                  value === option.value
-                    ? "bg-[#F5F7FF] text-[#384EC7]"
-                    : "hover:bg-gray-50",
-                )}
-              >
-                {option.label}
-              </button>
-            ))
-          ) : (
-            <div className="px-4 py-3 text-sm text-gray-400">
-              No options available
-            </div>
-          )}
+        <div className="absolute left-0 top-full z-50 mt-2 w-full max-h-60 overflow-y-auto rounded-lg border border-[#E5E7EB] bg-white shadow-xl ">
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => {
+                onChange(option.value);
+                setOpen(false);
+              }}
+              className={clsx(
+                "w-full px-4 py-3 text-left hover:bg-[#F5F7FF]",
+                value === option.value && "bg-[#F5F7FF] text-[#384EC7]",
+              )}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
       )}
     </div>

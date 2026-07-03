@@ -14,21 +14,20 @@ export interface SelectProps {
   className?: string;
 }
 
-
-export interface InputProps
-  extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
 }
-
 
 export interface RadioOption {
   label: string;
   value: string;
 }
 
-export interface RadioProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "onChange"> {
+export interface RadioProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "type" | "onChange"
+> {
   name: string;
   options: RadioOption[];
   value: string;

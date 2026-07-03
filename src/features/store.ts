@@ -1,9 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import testReducer from "./reducers/testSlice";
+import subjectReducer from "./reducers/subjectSlice";
+import topicReducer from "./reducers/topicSlice";
+import subTopicReducer from "./reducers/subTopicSlice";
 
 export const store = configureStore({
   reducer: {
     tests: testReducer,
+    subject: subjectReducer,
+    topics: topicReducer,
+    subTopics: subTopicReducer,
   },
 });
 

@@ -62,7 +62,58 @@ export interface TableProps<T> {
   loading?: boolean;
 }
 
-
 export interface StatusBadgeProps {
   status?: string | null;
+}
+
+export interface Subject {
+  id: string;
+  name: string;
+}
+
+export interface GetSubjectsResponse {
+  success: boolean;
+  data: Subject[];
+}
+
+export interface SubjectsState {
+  subjects: Subject[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface Topic {
+  id: string;
+  subject_id: string;
+  name: string;
+}
+
+export interface GetTopicsResponse {
+  status: string;
+  message: string;
+  data: Topic[];
+}
+
+export interface TopicsState {
+  topics: Topic[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface subTopic {
+  id: string;
+  topic_id: string;
+  name: string;
+}
+
+export interface GetSubTopicsResponse {
+  status: string;
+  message: string;
+  data: subTopic[];
+}
+
+export interface SubTopicsState {
+  subTopics: subTopic[];
+  loading: boolean;
+  error: string | null;
 }

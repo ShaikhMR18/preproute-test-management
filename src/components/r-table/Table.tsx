@@ -202,7 +202,7 @@ function Table<T>({ columns, data, loading = false }: TableProps<T>) {
           <button
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => prev - 1)}
-            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
           >
             <ChevronLeft size={18} />
           </button>
@@ -214,7 +214,7 @@ function Table<T>({ columns, data, loading = false }: TableProps<T>) {
           <button
             disabled={currentPage === totalPages || totalPages === 0}
             onClick={() => setCurrentPage((prev) => prev + 1)}
-            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
           >
             <ChevronRight size={18} />
           </button>
