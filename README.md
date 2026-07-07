@@ -52,7 +52,8 @@ A modern Test Management System built using **React 19**, **TypeScript**, **Redu
 | Zod | Latest |
 | React Hot Toast | Latest |
 | Lucide React | Latest |
-
+|react-quill | 
+| papaparse |
 ---
 
 # Project Structure
