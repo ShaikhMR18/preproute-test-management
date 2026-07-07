@@ -2,7 +2,7 @@ import axios from "axios";
 import { STORAGE_KEYS } from "../constants";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "https://admin-moderator-backend-staging.up.railway.app/api",
   headers: {
     "Content-Type": "application/json",
   },
