@@ -125,7 +125,7 @@ export interface OptionItem {
 }
 
 interface CreateQuestion {
-  type: "mcq";
+  type: string;
   question: string;
   option1: string;
   option2: string;

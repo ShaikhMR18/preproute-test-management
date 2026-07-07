@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import QuestionSummary from "../components/questions/QuestionSummary";
 import Button from "../components/r-Buttton/Button";
-import { DownLoadIcon } from "../assets";
 import { useState } from "react";
 import QuestionEditor from "../components/questions/QuestionEditor";
 import SolutionEditor from "../components/questions/SolutionEditor";
@@ -13,6 +12,7 @@ import { useGetTestById } from "../hooks/useTest";
 import { CreateBulkQuestions } from "../api/test.api";
 import { showError, showSuccess } from "../utils/toast";
 import PublishConfirmation from "../components/PublishConfirmation";
+import CSVUploadButton from "../components/questions/CSVUploader";
 
 const AddQuestions = () => {
   const { id } = useParams<{ id: string }>();
@@ -127,7 +127,7 @@ const AddQuestions = () => {
   return (
     <div className="flex h-full ">
       <div className="flex-1 p-2">
-       <QuestionSummary testId={id ?? ""} />
+        <QuestionSummary testId={id ?? ""} />
 
         <div className="mt-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-[#2E3446]">
@@ -146,13 +146,15 @@ const AddQuestions = () => {
               + MCQ
             </Button>
 
-            <Button
-              variant="default"
-              className="rounded-lg outline-none focus:outline-none focus:ring-0 focus:ring-offset-0 px-2 py-2 flex gap-0.5"
-            >
-              <DownLoadIcon width={20} height={20} />
-              CSV
-            </Button>
+            <CSVUploadButton
+              subjectId={id ?? ""}
+              testId={test?.id ?? ""}
+              onSuccess={() => {
+                if (id) {
+                  loadTestById(id);
+                }
+              }}
+            />
           </div>
         </div>
         {showPublishScreen ? (
