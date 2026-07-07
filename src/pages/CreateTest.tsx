@@ -13,15 +13,20 @@ import { useTopics } from "../hooks/useTopics";
 import { useSubTopics } from "../hooks/useSubTopic";
 
 import { createTestSchema } from "./Schema";
+import { useCreateTests } from "../hooks/useTest";
+import type { CreateTestPayload } from "../components/r-types";
+import { useNavigate } from "react-router-dom";
 
 type CreateTestInput = z.input<typeof createTestSchema>;
 type CreateTestOutput = z.output<typeof createTestSchema>;
 
 const CreateTest: React.FC = () => {
+  const navigate = useNavigate();
   const { subjects, loadSubjects } = useSubjects();
   const { topics, loadTopics } = useTopics();
   const { subTopics: sTopic, loadSubTopics } = useSubTopics();
-
+  const { createTest } = useCreateTests();
+  
   const {
     register,
     handleSubmit,
@@ -37,8 +42,8 @@ const CreateTest: React.FC = () => {
     defaultValues: {
       name: "",
       subject: "",
-      topic: "",
-      subTopic: "",
+      topic: [],
+      subTopic: [],
       difficulty: "easy",
       totalTime: 0,
       wrongMarks: -1,
@@ -53,8 +58,32 @@ const CreateTest: React.FC = () => {
     loadSubjects();
   }, [loadSubjects]);
 
-  const onSubmit = (data: CreateTestOutput) => {
-    console.log(data);
+  const mapToPayload = (data: CreateTestOutput): CreateTestPayload => ({
+    name: data.name,
+    type: "chapterwise",
+    subject: data.subject,
+    topics: data.topic,
+    sub_topics: data.subTopic,
+    correct_marks: data.correctMarks,
+    wrong_marks: data.wrongMarks,
+    unattempt_marks: data.unattemptMarks,
+    difficulty: data.difficulty,
+    total_time: data.totalTime,
+    total_marks: data.totalMarks,
+    total_questions: data.totalQuestions,
+    status: "draft",
+  });
+
+  const onSubmit = async (data: CreateTestOutput) => {
+    try {
+      const response = await createTest(mapToPayload(data));
+      console.log("testcreated", response);
+      if (response.status === "success") {
+        navigate(`/tests/${response.data.id}/questions`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const subjectOptions = useMemo(
@@ -70,6 +99,7 @@ const CreateTest: React.FC = () => {
     register("topic");
     register("subTopic");
   }, [register]);
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -91,14 +121,14 @@ const CreateTest: React.FC = () => {
             options={subjectOptions}
             value={watch("subject") || ""}
             onChange={(value) => {
-              setValue("subject", value, {
+              setValue("subject", value as string, {
                 shouldValidate: true,
                 shouldDirty: true,
               });
 
               clearErrors("subject");
 
-              loadTopics(value);
+              loadTopics(value as string);
             }}
           />
 
@@ -117,21 +147,20 @@ const CreateTest: React.FC = () => {
         <div>
           <DropDown
             label="Topic"
-            placeholder="Select Topic"
+            multiple
             options={topics.map((item) => ({
               label: item.name,
               value: item.id,
             }))}
-            value={watch("topic") || ""}
+            value={watch("topic")}
             onChange={(value) => {
-              setValue("topic", value, {
-                shouldValidate: true,
-                shouldDirty: true,
+              const selectedTopics = value as string[];
+
+              setValue("topic", selectedTopics);
+
+              selectedTopics.forEach((id) => {
+                loadSubTopics(id);
               });
-
-              clearErrors("topic");
-
-              loadSubTopics(value);
             }}
           />
 
@@ -142,20 +171,18 @@ const CreateTest: React.FC = () => {
         <div>
           <DropDown
             label="Sub Topic"
-            placeholder="Select Sub Topic"
+            multiple
             options={sTopic.map((item) => ({
               label: item.name,
               value: item.id,
             }))}
-            value={watch("subTopic") || ""}
-            onChange={(value) => {
-              setValue("subTopic", value, {
+            value={watch("subTopic")}
+            onChange={(value) =>
+              setValue("subTopic", value as string[], {
                 shouldValidate: true,
                 shouldDirty: true,
-              });
-
-              clearErrors("subTopic");
-            }}
+              })
+            }
           />
 
           {errors.subTopic && (

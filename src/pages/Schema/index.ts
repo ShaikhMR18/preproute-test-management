@@ -11,9 +11,9 @@ export const createTestSchema = z.object({
 
   subject: z.string().trim().min(1, "Subject is required"),
 
-  topic: z.string().trim().min(1, "Topic is required"),
+  topic: z.array(z.string()).min(1, "Please select at least one Topic"),
 
-  subTopic: z.string().trim().min(1, "Sub Topic is required"),
+  subTopic: z.array(z.string()).min(1, "Please select at least one Sub Topic"),
 
   difficulty: z.enum(["easy", "medium", "difficult"]),
 

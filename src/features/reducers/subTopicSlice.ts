@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
 import { fetchSubTopics } from "../actions/test.action";
-import type {  SubTopicsState } from "../../types";
+import type { SubTopicsState } from "../../types";
 
 const initialState: SubTopicsState = {
   subTopics: [],
@@ -21,7 +21,12 @@ const subTopicSlice = createSlice({
       })
       .addCase(fetchSubTopics.fulfilled, (state, action) => {
         state.loading = false;
-        state.subTopics = action.payload;
+
+        const merged = [...state.subTopics, ...action.payload];
+
+        state.subTopics = Array.from(
+          new Map(merged.map((item) => [item.id, item])).values(),
+        );
       })
       .addCase(fetchSubTopics.rejected, (state, action) => {
         state.loading = false;
@@ -34,7 +39,8 @@ const subTopicSlice = createSlice({
 });
 
 export const getSubTopics = (state: RootState) => state.subTopics.subTopics;
-export const getSubTopicsLoading = (state: RootState) => state.subTopics.loading;
+export const getSubTopicsLoading = (state: RootState) =>
+  state.subTopics.loading;
 export const getSubTopicsError = (state: RootState) => state.subTopics.error;
 
 export default subTopicSlice.reducer;

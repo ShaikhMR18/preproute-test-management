@@ -3,9 +3,6 @@ import type { RootState } from "../store";
 import { fetchTests } from "../actions/test.action";
 import type { Test, TestState } from "../../types";
 
-
-
-
 const initialState: TestState = {
   tests: [] as Test[],
   loading: false,

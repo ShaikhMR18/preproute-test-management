@@ -36,7 +36,8 @@ const Header = () => {
   };
 
   return (
-    <header className="flex h-20 items-center justify-end border-b border-[#E5E7EB] bg-white px-8">
+    <header className="flex  h-20 items-center justify-end border-b border-[#E5E7EB] bg-white px-8">
+    
       <div className="flex items-center gap-4"   ref={dropdownRef}>
         <button className="items-center justify-center rounded-full border border-[#E5E7EB] transition hover:bg-gray-50 cursor-pointer">
           <Bell width={48} height={48} />

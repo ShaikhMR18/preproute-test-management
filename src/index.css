@@ -1,4 +1,51 @@
 @import "tailwindcss";
-*{
-    font-family: 'Inter', sans-serif;
+* {
+  font-family: "Inter", sans-serif;
+}
+
+.ql-toolbar.ql-snow {
+  border: none;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 10px 12px;
+}
+
+.ql-toolbar .ql-formats {
+  margin-right: 14px;
+}
+
+.ql-container.ql-snow {
+  border: none;
+}
+
+.ql-editor {
+  min-height: 180px;
+}
+
+.ql-toolbar button:hover {
+  background: #f3f4f6;
+  border-radius: 6px;
+}
+
+.ql-toolbar button.ql-active {
+  background: #eef2ff;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #7489FF; 
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7489FF; 
 }

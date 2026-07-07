@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: "primary" | "secondary" | "danger";
+  variant?: "primary" | "secondary" | "danger" | "default";
 }
 
 const buttonVariants = {
@@ -15,6 +15,8 @@ const buttonVariants = {
 
   danger:
     "bg-[#FF7F7F] text-white hover:bg-[#FF6B6B] active:bg-[#F85C5C]",
+  default:
+    "bg-[#FAFAFA] text-[#9CA3AF] hover:bg-[#FAFAFA] focus:outline-none focus:ring-0 focus:ring-offset-0 border-0",
 };
 
 const Button = ({

@@ -3,13 +3,13 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard"; // Layout (contains Outlet)
 import CreateTest from "../pages/CreateTest";
-import AddQuestions from "../pages/AddQuestions";
 import Preview from "../pages/Preview";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 import DashboardPage from "../pages/DashboardPage";
 import TestTracking from "../pages/TestTracking";
+import AddQuestions from "../pages/AddQuestion";
 
 const AppRoutes = () => {
   return (

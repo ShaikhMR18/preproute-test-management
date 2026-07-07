@@ -117,3 +117,73 @@ export interface SubTopicsState {
   loading: boolean;
   error: string | null;
 }
+
+export interface OptionItem {
+  id: number;
+  label: "option1" | "option2" | "option3" | "option4";
+  text: string;
+}
+
+interface CreateQuestion {
+  type: "mcq";
+  question: string;
+  option1: string;
+  option2: string;
+  option3: string;
+  option4: string;
+  correct_option: "option1" | "option2" | "option3" | "option4";
+  explanation: string;
+  difficulty: "easy" | "medium" | "difficult";
+  subject: string;
+  test_id: string;
+}
+
+export interface CreateQuestionsPayload {
+  questions: CreateQuestion[];
+}
+
+export type Difficulty = "easy" | "medium" | "difficult";
+
+export interface TestDetails {
+  id: string;
+  name: string;
+  type: string;
+  subject: string;
+  topics: string[];
+  sub_topics: string[];
+  questions: string[] | null;
+  correct_marks: number;
+  unattempt_marks: number;
+  wrong_marks: number;
+  difficulty: "easy" | "medium" | "difficult";
+  total_marks: number;
+  total_time: number;
+  total_questions: number;
+  slot: string | null;
+  hidden_from_moderator: boolean | null;
+  paragraph_question: string | null;
+  status: string;
+  scheduled_date: string | null;
+  expiry_date: string | null;
+  original_files: string[];
+}
+
+export type BottomActionBarProps = {
+  onExit?: () => void;
+  onAskToEdit?: () => void;
+  onNext?: () => void;
+};
+
+
+export interface OptionItem {
+  id: number;
+  text: string;
+}
+
+export type OptionsSectionProps = {
+  options: OptionItem[];
+  correctOption: number | null;
+  onOptionChange: (id: number, value: string) => void;
+  onCorrectOptionChange: (id: number) => void;
+  onDeleteOption?: (id: number) => void;
+};

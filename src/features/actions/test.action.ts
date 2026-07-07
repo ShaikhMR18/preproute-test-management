@@ -53,3 +53,16 @@ export const fetchSubTopics = createAsyncThunk(
     }
   },
 );
+
+export const fetchTestById = createAsyncThunk(
+  "tests/fetchTestById",
+  async (testId: string, { rejectWithValue }) => {
+    try {
+      return await testApi.fetchTest(testId);
+    } catch (error: unknown) {
+      const axiosError = error as AxiosError<{ message: string }>;
+
+      return rejectWithValue(axiosError.response?.data ?? axiosError.message);
+    }
+  },
+);

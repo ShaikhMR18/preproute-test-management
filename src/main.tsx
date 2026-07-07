@@ -10,7 +10,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { store } from './features/store.ts';
-
+import "quill/dist/quill.snow.css";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
