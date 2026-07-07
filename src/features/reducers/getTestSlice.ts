@@ -18,7 +18,13 @@ const initialState: TestDetailsState = {
 const getTestSlice = createSlice({
   name: "getTest",
   initialState,
-  reducers: {},
+  reducers: {
+    clearTest(state) {
+      state.test = null;
+      state.loading = false;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTestById.pending, (state) => {
@@ -44,3 +50,4 @@ export const getTestByIdLoading = (state: RootState) => state.getTest.loading;
 export const getTestByIdError = (state: RootState) => state.getTest.error;
 
 export default getTestSlice.reducer;
+export const { clearTest } = getTestSlice.actions;

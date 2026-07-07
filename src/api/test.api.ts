@@ -39,3 +39,22 @@ export const CreateBulkQuestions = async (
   const response = await api.post(ENDPOINTS.CREATE_QUESTIONS, createQuestions);
   return response.data;
 };
+
+export const PublishTest = async (testId: string) => {
+  const response = await api.put(`${ENDPOINTS.PUBLISH_TEST}/${testId}`, {
+    status: "live",
+  });
+
+  return response.data;
+};
+
+export const UpdateTest = async (id: string, payload: CreateTestPayload) => {
+  const response = await api.put(`${ENDPOINTS.EDIT_TEST}/${id}`, payload);
+
+  return response.data;
+};
+
+export const DeleteTest = async (testId: string) => {
+  const response = await api.delete(`${ENDPOINTS.DELETE_TEST}/${testId}`);
+  return response.data;
+};

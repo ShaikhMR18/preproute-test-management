@@ -12,12 +12,12 @@ import BottomActionBar from "../components/questions/BottomActionBar";
 import { useGetTestById } from "../hooks/useTest";
 import { CreateBulkQuestions } from "../api/test.api";
 import { showError, showSuccess } from "../utils/toast";
+import PublishConfirmation from "../components/PublishConfirmation";
 
 const AddQuestions = () => {
   const { id } = useParams<{ id: string }>();
   const [question, setQuestion] = useState("");
   const { test, loadTestById } = useGetTestById();
-
   const [options, setOptions] = useState<OptionItem[]>([
     { id: 1, text: "", label: "option1" },
     { id: 2, text: "", label: "option2" },
@@ -31,6 +31,9 @@ const AddQuestions = () => {
   const [topic, setTopic] = useState("");
   const [subTopic, setSubTopic] = useState("");
   const [mediaUrl, setMediaUrl] = useState("");
+  const questionCount = test?.questions?.length ?? 0;
+
+  const showPublishScreen = questionCount >= (test?.total_questions ?? 0);
 
   const handleOptionChange = (id: number, value: string) => {
     setOptions((prev) =>
@@ -39,7 +42,6 @@ const AddQuestions = () => {
       ),
     );
   };
-
   const handleDeleteOption = (id: number) => {
     setOptions((prev) =>
       prev.map((option) =>
@@ -124,14 +126,15 @@ const AddQuestions = () => {
   };
   return (
     <div className="flex h-full ">
-      {/* Content */}
       <div className="flex-1 p-2">
-        <QuestionSummary testId={id ?? ""} />
+       <QuestionSummary testId={id ?? ""} />
 
         <div className="mt-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-[#2E3446]">
             Question{" "}
-            <span className="text-[#090909]">{test?.questions?.length || 0}</span>
+            <span className="text-[#090909]">
+              {test?.questions?.length || 0}
+            </span>
             <span className="text-[#99a4e4]">/{test?.total_questions}</span>
           </h2>
 
@@ -152,47 +155,60 @@ const AddQuestions = () => {
             </Button>
           </div>
         </div>
-        <div className="">
-          <QuestionEditor value={question} onChange={setQuestion} />
-        </div>
-        <div>
-          <OptionsSection
-            options={options}
-            correctOption={correctOption}
-            onOptionChange={handleOptionChange}
-            onCorrectOptionChange={setCorrectOption}
-            onDeleteOption={handleDeleteOption}
-          />
-        </div>
-        <div className="mt-8">
-          <SolutionEditor value={solution} onChange={setSolution} />
-        </div>
-        <div>
-          <QuestionSettings
-            difficulty={difficulty}
-            topic={topic}
-            subTopic={subTopic}
-            mediaUrl={mediaUrl}
-            difficultyOptions={[
-              { label: "Easy", value: "easy" },
-              { label: "Medium", value: "medium" },
-              { label: "Difficult", value: "difficult" },
-            ]}
-            topicOptions={topicOptions}
-            subTopicOptions={subTopicOptions}
-            onDifficultyChange={setDifficulty}
-            onTopicChange={setTopic}
-            onSubTopicChange={setSubTopic}
-            onMediaUrlChange={setMediaUrl}
-          />
-        </div>
-        <div>
-          <BottomActionBar
-            onExit={() => console.log("Exit")}
-            onAskToEdit={() => console.log("Ask AI")}
-            onNext={handleNext}
-          />
-        </div>
+        {showPublishScreen ? (
+          <div className="pb-2">
+            <PublishConfirmation
+              onCancel={() => console.log("hbhjb")}
+              onConfirm={() => {
+                console.log("Publish Test");
+              }}
+            />
+          </div>
+        ) : (
+          <>
+            <div className="">
+              <QuestionEditor value={question} onChange={setQuestion} />
+            </div>
+            <div>
+              <OptionsSection
+                options={options}
+                correctOption={correctOption}
+                onOptionChange={handleOptionChange}
+                onCorrectOptionChange={setCorrectOption}
+                onDeleteOption={handleDeleteOption}
+              />
+            </div>
+            <div className="mt-8">
+              <SolutionEditor value={solution} onChange={setSolution} />
+            </div>
+            <div>
+              <QuestionSettings
+                difficulty={difficulty}
+                topic={topic}
+                subTopic={subTopic}
+                mediaUrl={mediaUrl}
+                difficultyOptions={[
+                  { label: "Easy", value: "easy" },
+                  { label: "Medium", value: "medium" },
+                  { label: "Difficult", value: "difficult" },
+                ]}
+                topicOptions={topicOptions}
+                subTopicOptions={subTopicOptions}
+                onDifficultyChange={setDifficulty}
+                onTopicChange={setTopic}
+                onSubTopicChange={setSubTopic}
+                onMediaUrlChange={setMediaUrl}
+              />
+            </div>
+            <div>
+              <BottomActionBar
+                onExit={() => console.log("Exit")}
+                onAskToEdit={() => console.log("Ask AI")}
+                onNext={handleNext}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -1,81 +1,49 @@
-import { useMemo, useRef, useState } from "react";
 import {
-  ChevronUp,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import type { ColumnDef, SortingState } from "@tanstack/react-table";
+import { useMemo, useState } from "react";
+import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
 } from "lucide-react";
 
-import type { TableProps } from "../../types";
+interface TableProps<T extends object> {
+  columns: ColumnDef<T, unknown>[];
+  data: T[];
+  loading?: boolean;
+}
 
-function Table<T>({ columns, data, loading = false }: TableProps<T>) {
-  const [sortBy, setSortBy] = useState<keyof T | null>(null);
-  const [direction, setDirection] = useState<"asc" | "desc">("asc");
+function Table<T extends object>({
+  columns,
+  data,
+  loading = false,
+}: TableProps<T>) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 15,
+  });
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(15);
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [openUp, setOpenUp] = useState(false);
-
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const handleToggle = () => {
-    if (dropdownRef.current) {
-      const rect = dropdownRef.current.getBoundingClientRect();
-
-      const dropdownHeight = 180; 
-      const spaceBelow = window.innerHeight - rect.bottom;
-      const spaceAbove = rect.top;
-
-      setOpenUp(spaceBelow < dropdownHeight && spaceAbove > dropdownHeight);
-    }
-
-    setIsOpen((prev) => !prev);
-  };
-  const sortedData = useMemo(() => {
-    if (!sortBy) return data;
-
-    return [...data].sort((a, b) => {
-      const valueA = (a as Record<string, unknown>)[sortBy as string];
-      const valueB = (b as Record<string, unknown>)[sortBy as string];
-
-      if (String(sortBy) === "created_at") {
-        return direction === "asc"
-          ? new Date(String(valueA)).getTime() -
-              new Date(String(valueB)).getTime()
-          : new Date(String(valueB)).getTime() -
-              new Date(String(valueA)).getTime();
-      }
-
-      return direction === "asc"
-        ? String(valueA).localeCompare(String(valueB))
-        : String(valueB).localeCompare(String(valueA));
-    });
-  }, [data, sortBy, direction]);
-
-  const handleSort = (key: keyof T) => {
-    if (sortBy === key) {
-      setDirection((prev) => (prev === "asc" ? "desc" : "asc"));
-    } else {
-      setSortBy(key);
-      setDirection("asc");
-    }
-  };
-
-  // Pagination
-  const totalPages = Math.ceil(sortedData.length / rowsPerPage);
-
-  const paginatedData = useMemo(() => {
-    const start = (currentPage - 1) * rowsPerPage;
-
-    return sortedData.slice(start, start + rowsPerPage);
-  }, [sortedData, currentPage, rowsPerPage]);
-
-  const startRecord =
-    sortedData.length === 0 ? 0 : (currentPage - 1) * rowsPerPage + 1;
-
-  const endRecord = Math.min(currentPage * rowsPerPage, sortedData.length);
+  const table = useReactTable({
+    data: useMemo(() => data, [data]),
+    columns,
+    state: {
+      sorting,
+      pagination,
+    },
+    onSortingChange: setSorting,
+    onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  });
 
   if (loading) {
     return (
@@ -86,137 +54,135 @@ function Table<T>({ columns, data, loading = false }: TableProps<T>) {
   }
 
   return (
-    <div className=" rounded-xl border border-gray-200 bg-white shadow-sm">
-      <div className=" overflow-auto max-h-[550px]">
-        <table className="min-w-full overflow-hidden">
-          <thead className="sticky top-0 z-50 bg-[#F8FAFC]">
-            <tr>
-              {columns.map((column) => (
-                <th
-                  key={String(column.key)}
-                  onClick={() =>
-                    column.sortable && handleSort(column.key as keyof T)
-                  }
-                  className={`px-6 py-2 text-left text-sm font-semibold text-gray-700 ${
-                    column.sortable ? "cursor-pointer select-none" : ""
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    {column.title}
-
-                    {column.sortable &&
-                      sortBy === column.key &&
-                      (direction === "asc" ? (
-                        <ChevronUp size={16} />
-                      ) : (
-                        <ChevronDown size={16} />
-                      ))}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody>
-            {paginatedData.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={columns.length}
-                  className="py-8 text-center text-gray-400"
-                >
-                  No Records Found
-                </td>
-              </tr>
-            ) : (
-              paginatedData.map((row, index) => (
-                <tr key={index} className="border-t hover:bg-gray-50">
-                  {columns.map((column) => (
-                    <td
-                      key={String(column.key)}
-                      className="px-6 py-1.5 text-sm text-gray-700"
+    <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-lg border border-gray-300 overflow-hidden bg-white">
+        <div className="max-h-[500px] overflow-auto">
+          <table className="min-w-full border-collapse">
+            <thead className="sticky top-0 z-20 bg-[#384EC7] text-white">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                      className={`whitespace-nowrap border-b border-[#294c7d] px-4 py-3 text-left text-sm font-semibold ${
+                        header.column.getCanSort()
+                          ? "cursor-pointer select-none"
+                          : ""
+                      }`}
                     >
-                      {column.render
-                        ? column.render(row)
-                        : String(
-                            (row as Record<string, unknown>)[
-                              column.key as string
-                            ] ?? "",
-                          )}
+                      <div className="flex items-center gap-2">
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+
+                        {{
+                          asc: <ChevronUp size={14} />,
+                          desc: <ChevronDown size={14} />,
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="border-b border-gray-200 hover:bg-gray-50"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="whitespace-nowrap px-4 py-3 text-sm text-gray-700"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </td>
                   ))}
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Pagination */}
-
-      <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-200 px-6 py-1 md:flex-row">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col items-center justify-between gap-4 border-t border-gray-200 bg-white px-6 py-3 md:flex-row">
+        {/* Rows per page */}
+        <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Rows per page</span>
 
-          <div className="relative w-28" ref={dropdownRef}>
-            <button
-              onClick={handleToggle}
-              className="flex h-8 w-full items-center justify-between rounded-lg border px-3"
-            >
-              <span>{rowsPerPage}</span>
-              <ChevronDown
-                className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-
-            {isOpen && (
-              <div
-                className={`absolute left-0 z-50 w-full rounded-lg border bg-white shadow-lg ${
-                  openUp ? "bottom-full mb-2" : "top-full mt-2"
-                }`}
-              >
-                {[15, 25, 50, 100].map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => {
-                      setRowsPerPage(size);
-                      setCurrentPage(1);
-                      setIsOpen(false);
-                    }}
-                    className={`block w-full px-4 py-2 text-left hover:bg-gray-100 ${
-                      rowsPerPage === size ? "bg-[#EEF3FF] text-[#384EC7]" : ""
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          <select
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => table.setPageSize(Number(e.target.value))}
+            className="rounded-md border border-gray-300 px-3 py-1.5 text-sm outline-none focus:border-blue-500"
+          >
+            {[10, 15, 25, 50, 100].map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <span className="text-sm text-gray-600">
-          {startRecord}-{endRecord} of {sortedData.length}
-        </span>
+        {/* Showing records */}
+        <div className="text-sm text-gray-600">
+          {table.getRowModel().rows.length === 0
+            ? "0-0"
+            : `${
+                table.getState().pagination.pageIndex *
+                  table.getState().pagination.pageSize +
+                1
+              }-${Math.min(
+                (table.getState().pagination.pageIndex + 1) *
+                  table.getState().pagination.pageSize,
+                data.length,
+              )}`}{" "}
+          of {data.length}
+        </div>
 
-        <div className="flex items-center gap-2">
+        {/* Pagination Buttons */}
+        <div className="flex items-center gap-1">
           <button
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage((prev) => prev - 1)}
-            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+            onClick={() => table.firstPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ⏮
+          </button>
+
+          <button
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ChevronLeft size={18} />
           </button>
 
-          <span className="text-sm font-medium">
-            {currentPage} / {totalPages || 1}
+          <span className="px-3 text-sm font-medium">
+            {table.getState().pagination.pageIndex + 1} / {table.getPageCount()}
           </span>
 
           <button
-            disabled={currentPage === totalPages || totalPages === 0}
-            onClick={() => setCurrentPage((prev) => prev + 1)}
-            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ChevronRight size={18} />
+          </button>
+
+          <button
+            onClick={() => table.lastPage()}
+            disabled={!table.getCanNextPage()}
+            className="rounded-md border p-2 disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            ⏭
           </button>
         </div>
       </div>

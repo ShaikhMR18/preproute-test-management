@@ -49,7 +49,7 @@ export interface SubTopic {
 
 export interface CreateTestPayload {
   name: string;
-  type: "chapterwise" | "subjectwise" | "mock";
+  type: "chapterwise" | "pyq" | "mock";
   subject: string;
   topics: string[];
   sub_topics: string[];
@@ -62,11 +62,11 @@ export interface CreateTestPayload {
   total_questions: number;
   status: "live" | "draft" | "scheduled" | null;
 }
-
+export type TestType = "chapterwise" | "pyq" | "mock";
 export interface TestDetails {
   id: string;
   name: string;
-  type: "chapterwise" | "subjectwise" | "mock";
+  type: TestType;
   subject: string;
   topics: string[];
   sub_topics: string[];

@@ -1,5 +1,5 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetTestById } from "../../hooks/useTest";
+import { DrawerIcon, MarkIcon, TickIcon } from "../../assets";
 
 type Props = {
   open: boolean;
@@ -16,17 +16,25 @@ const QuestionNavigation = ({ open, onToggle }: Props) => {
       {/* Toggle Button */}
       <button
         onClick={onToggle}
-        className="absolute left-[72px] top-36 z-50 flex h-7 w-7 items-center justify-center rounded-full border bg-white shadow"
+        className="absolute left-55 top-36 z-50 flex h-7 w-7 items-center justify-cente cursor-pointer"
       >
-        {open ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+        {open ? (
+          <DrawerIcon width={20} height={20} />
+        ) : (
+          <DrawerIcon
+            width={20}
+            height={20}
+            className={`${!open ? "rotate-180" : ""} transition-transform duration-300`}
+          />
+        )}
       </button>
 
       {/* Drawer */}
       <aside
         className={`
           absolute
-          left-15
           top-12
+           ${open ? "left-15" : "-left-64"}
           z-40
           h-[calc(100vh-80px)]
           mt-8
@@ -57,14 +65,13 @@ const QuestionNavigation = ({ open, onToggle }: Props) => {
             "
           >
             {questions?.map((_, ind) => (
-              <button
-                key={ind}
-                className="flex w-full items-center justify-between rounded-xl border border-[#2ECC71] px-4 py-2 hover:bg-[#F8FFF9] cursor-pointer"
-              >
-                <span>Question {ind + 1}</span>
-
-                <ChevronRight size={18} />
-              </button>
+              <div className="flex items-center justify-around gap-3 rounded-md border border-[#2ECC71] bg-[#F6FFF9] px-3 py-1 cursor-pointer">
+                <TickIcon width={12} height={10} />
+                <span className="text-xs font-medium text-[#27AE60]">
+                  Question {ind + 1}
+                </span>
+                <MarkIcon width={10} height={10} />
+              </div>
             ))}
           </div>
         </div>

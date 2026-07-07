@@ -1,75 +1,270 @@
-# React + TypeScript + Vite
+# Test Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern Test Management System built using **React 19**, **TypeScript**, **Redux Toolkit**, and **Tailwind CSS**. The application allows administrators to create, manage, and track tests through an intuitive dashboard.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+### Authentication
+- Login with JWT Authentication
+- Protected Routes
+- Axios Interceptors
+- Automatic Logout on Unauthorized Access
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Dashboard
+- View all tests
+- Responsive Data Table
+- Search & Filter
+- Sort by Test Name & Created Date
+- Pagination
+- Status Badges
+- Edit / View / Delete Actions
 
-## Expanding the ESLint configuration
+### Test Creation
+- Create New Test
+- Edit Existing Test
+- Subject Selection
+- Topic & Sub-topic Selection
+- Marking Scheme
+- Difficulty Level
+- Save as Draft
+- Publish Test
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Question Management
+- Add Questions
+- Edit Questions
+- Preview Test
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Technology | Version |
+|------------|----------|
+| React | 19 |
+| TypeScript | Latest |
+| Redux Toolkit | Latest |
+| React Router DOM | v7 |
+| Tailwind CSS | v4 |
+| Axios | Latest |
+| React Hook Form | Latest |
+| Zod | Latest |
+| React Hot Toast | Latest |
+| Lucide React | Latest |
 
+---
+
+# Project Structure
+
+```text
+src/
+│
+├── api/
+│   ├── axios.ts
+│   ├── endpoints.ts
+│   └── test.api.ts
+│
+├── assets/
+│
+├── components/
+│   ├── r-Button/
+│   ├── r-DropDown/
+│   ├── r-Input/
+│   ├── r-Table/
+│   ├── Sidebar/
+│   └── ...
+│
+├── features/
+│   ├── actions/
+│   ├── reducers/
+│   └── store.ts
+│
+├── hooks/
+│
+├── layouts/
+│
+├── pages/
+│
+├── routes/
+│
+├── schemas/
+│
+├── types/
+│
+├── utils/
+│
+└── App.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+# Installation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Clone the repository
+
+```bash
+git clone <repository-url>
+```
+
+Move into project
+
+```bash
+cd test-management-system
+```
+
+Install dependencies
+
+```bash
+npm install
+```
+
+Run the development server
+
+```bash
+npm run dev
+```
+
+---
+
+# Environment Variables
+
+Create a `.env` file in the project root.
+
+```env
+VITE_API_URL=https://your-api-url/api
+```
+
+---
+
+# Available Scripts
+
+Start development server
+
+```bash
+npm run dev
+```
+
+Build project
+
+```bash
+npm run build
+```
+
+Preview production build
+
+```bash
+npm run preview
+```
+
+Lint
+
+```bash
+npm run lint
+```
+
+---
+
+# API Integration
+
+## Authentication
 
 ```
+POST /auth/login
+```
+
+## Tests
+
+```
+GET /tests
+POST /tests
+PUT /tests/:id
+DELETE /tests/:id
+```
+
+---
+
+# Dashboard Features
+
+- Sticky Header
+- Sorting
+- Pagination
+- Search
+- Status Badges
+- Action Buttons
+
+---
+
+# State Management
+
+Redux Toolkit is used for:
+
+- Tests
+- Subjects
+- Topics
+- Sub Topics
+
+Architecture
+
+```
+API
+   ↓
+AsyncThunk
+   ↓
+Redux Slice
+   ↓
+Custom Hook
+   ↓
+Component
+```
+
+---
+
+# Reusable Components
+
+- Button
+- Input
+- Dropdown
+- Table
+- Status Badge
+- Sidebar
+- Header
+- Pagination
+- Table etc
+
+
+---
+
+# UI Highlights
+
+- Responsive Design
+- Clean Dashboard
+- Professional Table Layout
+- Mobile Friendly
+- Accessible Components
+- Modern Tailwind UI
+
+---
+
+# Future Enhancements
+
+- Server-side Pagination
+- Advanced Filters
+- Bulk Actions
+- Import/Export Tests
+- Dark Mode
+- Analytics Dashboard
+- Role-based Access Control
+
+---
+
+
+**Mazhar Shaikh**
+
+Frontend Developer ReactJS | NextJs | Angular 19 | MUI | Node.js | Express.js etc
+
+- TypeScript
+- Redux Toolkit
+- Tailwind CSS
+
+---

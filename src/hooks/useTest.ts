@@ -5,6 +5,7 @@ import { fetchTestById } from "../features/actions/test.action";
 import type { AppDispatch } from "../features/store";
 import { useCallback } from "react";
 import {
+  clearTest,
   getTestById,
   getTestByIdError,
   getTestByIdLoading,
@@ -34,10 +35,15 @@ export const useGetTestById = () => {
     [dispatch],
   );
 
+  const clearSelectedTest = useCallback(() => {
+    dispatch(clearTest());
+  }, [dispatch]);
+
   return {
     test,
     loading,
     error,
     loadTestById,
+    clearSelectedTest,
   };
 };
